@@ -34,19 +34,11 @@ public class DynamoDBConfig {
     public AmazonDynamoDB amazonDynamoDB() {
         return AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(amazonAWSCredentials()))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, Regions.DEFAULT_REGION.toString()))
+//                Use this to connect to DynamoDB docker image
+//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, Regions.DEFAULT_REGION.toString()))
+//                Use this to connect to real DynamoDB
+                .withRegion(Regions.EU_CENTRAL_1)
                 .build();
-    }
-
-    @Bean
-    @Primary
-    public DynamoDBMapper dynamoDBMapper(AmazonDynamoDB amazonDynamoDB) {
-        return new DynamoDBMapper(amazonDynamoDB, DynamoDBMapperConfig.DEFAULT);
-    }
-
-    @Bean
-    public DynamoDBMappingContext dynamoDBMappingContext() {
-        return new DynamoDBMappingContext();
     }
 
     @Bean

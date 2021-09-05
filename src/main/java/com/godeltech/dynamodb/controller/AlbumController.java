@@ -21,32 +21,37 @@ public class AlbumController {
         return IteratorUtils.toList(repository.findAll().iterator());
     }
 
-    @GetMapping("/dynamodb/albums/song/{song}")
-    public List<Album> getAlbumBySong(@PathVariable String song) {
-        return repository.findAllBySong(song);
+    @GetMapping("/dynamodb/album")
+    public Album getAlbumById(@RequestParam String artist, @RequestParam String title) {
+        var albumId = AlbumId.builder().artist(artist).title(title).build();
+        return repository.findById(albumId).orElse(null);
     }
 
-    @GetMapping("/dynamodb/albums/")
+    @GetMapping("/dynamodb/albums/artists/{artist}")
     public List<Album> getAllAlbumsByArtist(@PathVariable String artist) {
         return repository.findAllByArtist(artist);
     }
 
-    @PostMapping("/dynamodb/albums/")
+    @GetMapping("/dynamodb/albums/genres/{genre}")
+    public List<Album> getAllAlbumsByGenre(@PathVariable String genre) {
+        return repository.findAllByGenre(genre);
+    }
+
+    @PostMapping("/dynamodb/albums")
     public Album saveAlbum(@RequestBody Album album) {
         return repository.save(album);
     }
 
-    @PutMapping("/dynamodb/albums/")
-    public Album updateAlbum(@RequestBody Album album, @RequestParam String id, @RequestParam String name) {
-//        var albumId = AlbumId.builder().id(id).name(name).build();
-        album.setId(id);
-        album.setName(name);
+    @PutMapping("/dynamodb/albums")
+    public Album updateAlbum(@RequestBody Album album, @RequestParam String artist, @RequestParam String title) {
+        album.setArtist(artist);
+        album.setTitle(title);
         return repository.save(album);
     }
 
-    @DeleteMapping("/dynamodb/albums/")
-    public void deleteAlbum(@RequestParam String id, @RequestParam String name) {
-        var albumId = AlbumId.builder().id(id).name(name).build();
+    @DeleteMapping("/dynamodb/albums")
+    public void deleteAlbum(@RequestParam String artist, @RequestParam String title) {
+        var albumId = AlbumId.builder().artist(artist).title(title).build();
         repository.deleteById(albumId);
     }
 

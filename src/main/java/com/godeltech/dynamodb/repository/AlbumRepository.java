@@ -8,8 +8,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 @EnableScan
-public interface AlbumRepository extends AlbumCustomRepository, CrudRepository <Album, AlbumId> {
+public interface AlbumRepository extends CrudRepository<Album, AlbumId> {
 
     List<Album> findAllByArtist(String artist);
+    List<Album> findAllByGenre(String genre);
 
 }
